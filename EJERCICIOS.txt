@@ -79,14 +79,51 @@ promociones.
 tres promociones.
 
 
+db.hotel.find( { $expr: {$gt: [{ $size: "promociones" },1]}  } , {"nombre": 1, "direccion": 1, "telefono": 1})
+
+
+{
+    
 17. Explicar para qué sirve el operador de $elemMatch y dar un ejemplo.
 
+El operador $elemMatch es un operador utilizado para hacer consultas en MongoDB. 
+Este mismo es usado para seleccionar documentos que tengan cierto campo que cumpla con los parámetros especificados 
+en la consulta a realizar. Principalmente, este operador ayuda a buscar documentos con arrays dificiles con condiciones 
+muy específicas. Además, garantiza que todos los criterios de búsqueda se apliquen al mismo elemento dentro del documento.
+ 
+Por ejemplo, supongamos que tenemos el siguiente documento: 
+{
+  "_id": 1,
+  "nombre": "User_1",
+  "intereses": [
+    { "tema": "Comida", "nivel": "Experto" },
+    { "tema": "Musica", "nivel": "Principiante" }
+  ]
+}
+ 
+Para encontrar los documentos donde el interés sea "Comida" y que el interés sea "Principiante", 
+hay que usar el $elemMatch:
+ 
+db.collection.find({
+  "intereses": {
+    "$elemMatch": {
+      "tema": "Comida",
+      "nivel": "Principiante"}
+  }
+})
+ 
+De esta forma, MongoDB va a encontrar los documentos que cumplan si o si  con estos dos criterios en el mismo
+documento, no en separados.
+
+}
 
 18. Mostrar todos los hoteles que tengan dentro de “números útiles” el teléfono de
 emergencias médicas.
-
+// psrs d
 
 19. Mostrar los hoteles con sus promociones vigentes al día de hoy.
+
+db.hotel.find({"promociones.fechaFin" : {$gt: "$$NOW"} })
 
 
 20. Borrar todos los documentos de la collection que no ofrezcan comodidades.
