@@ -132,13 +132,13 @@ db.hotel.find(
 
 
 19. Mostrar los hoteles con sus promociones vigentes al día de hoy.
-
-db.hotel.find({"promociones.fechaFin" : {$gt: "$$NOW"} })
-
+-- db.hotel.find({"promociones.fechaFin" : {$gt: ISODate()} })
 
 20. Borrar todos los documentos de la collection que no ofrezcan comodidades.
 Tener en cuenta tanto los casos en los que existe como en los que no existe el
 campo.
+-- db.hotel.find({ "servicios": { $size: 0 } })
+
 
 21. Utilizando el método updateMany() dar un ejemplo de cada uno de los
 siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push
