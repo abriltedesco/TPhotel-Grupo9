@@ -67,13 +67,41 @@ db.hotel.aggregate([
 13. Mostrar los hoteles que tengan spa, pileta y además alguna promoción vigente
 mayor al 20%.
 
+db.hotel.find({
+  "servicios.idServicio": { "$in": [1, 2] },  
+  //1 para el spa y 2 para pileta
+  "promociones": {
+    "$elemMatch": {
+      "porcentaje": { "$gt": 20 },
+    }
+  }
+}, 
+{
+  "nombre": 1,
+  "direccion": 1,
+  "telefono": 1
+}
+)
 
 14. Mostrar todos los hoteles (nombre, dirección y teléfono) que no tengan
 promociones.
 
+db.hotel.find(
+{
+  "promociones": { "$size": 0 }
+}, 
+{
+  "nombre": 1,
+  "direccion": 1,
+  "telefono": 1
+}
+)
 
 15. Mostrar los mensajes recibidos del hotel con id 2.
 
+db.chat.find(
+{"idHotel":2},{"enviadosPorUser": 1, "_id":0}
+)
 
 16. Mostrar todos los hoteles (nombre, dirección y teléfono) que tienen, al menos,
 tres promociones.
@@ -147,3 +175,4 @@ siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push
 un documento json. Lo mismo para importar los datos desde un documento json
 y generar una collection dentro de la base de datos.
 -- ESTE PROBEMOSLO EN CLASE !!!
+
