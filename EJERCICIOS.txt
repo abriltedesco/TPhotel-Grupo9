@@ -119,7 +119,17 @@ documento, no en separados.
 
 18. Mostrar todos los hoteles que tengan dentro de “números útiles” el teléfono de
 emergencias médicas.
-// psrs d
+//Por la forma en la que tenemos modelada la base de datos lo tenemos que hacer con 2 consultas distintas
+//y de manera "hardcodeada"
+db.numerosUtiles.find(
+  { "numeroUtil.nombre": "SAME" },
+  { ciudad: 1, _id: 0 }
+)
+db.hotel.find(
+  { ciudadNumUtiles: { $in: ["Buenos Aires", "Puerto Madryn"] } },
+  { nombre: 1, ciudad: 1, direccion: 1, telefono: 1 }
+)
+
 
 19. Mostrar los hoteles con sus promociones vigentes al día de hoy.
 
