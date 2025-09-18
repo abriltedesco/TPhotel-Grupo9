@@ -18,8 +18,7 @@ ese valor en la fecha actual.
 )
 
 6. Mostrar el nombre de los hoteles que cuentan con alguna promoción del 10%.
--- en este si o si tenemos que hacer un "join" como no sabemos hacerlo lo pensamos de esta forma: 
-db.hotel.find(
+-- db.hotel.find(
     {"promociones.porcentaje" : 10}, {"_id":0, "nombre": 1}
 )
 
@@ -163,7 +162,6 @@ siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push
 {"id":6} , {$inc : {"id":100}}
 )
 
-
 -- db.hotel.updateMany(
   { }, { $max: { "promociones.$[].porcentaje": 50 } }
 )
@@ -188,4 +186,5 @@ y generar una collection dentro de la base de datos.
 -- 
 mongoexport --db=tpHotel --collection=hotel --out=tpHotel.json --jsonFormat=relaxed
 mongoimport --db=tpHotel --collection=hotelsito  --file=tpHotel.json
+
 
