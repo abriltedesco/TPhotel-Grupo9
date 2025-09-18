@@ -169,10 +169,35 @@ campo.
 
 
 21. Utilizando el método updateMany() dar un ejemplo de cada uno de los
-siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push
+siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push.
+
+-- $max
+
+db.promociones.updateMany(
+{ $max: { "porcentaje": 50} }
+)
+
+-- $mul 
+
+db.promociones.updateMany(
+{"id":3} , {$mul : {"porcentaje":2}}
+)
+
+-- $rename
+
+db.promociones.updateMany(
+{ $rename: { "nombre": "promocion nueva"} }
+)
+
+-- $inc
+
+db.promocion.updateMany(
+{"id":2},{$inc: {"porcentaje":5}}
+)
 
 22. Indicar el comando utilizado para exportar los datos de una collection y generar
 un documento json. Lo mismo para importar los datos desde un documento json
 y generar una collection dentro de la base de datos.
 -- ESTE PROBEMOSLO EN CLASE !!!
+
 
