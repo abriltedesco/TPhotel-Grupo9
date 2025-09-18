@@ -50,8 +50,7 @@ Elegir un hotel al azar.
 
 11.Mostrar el nombre del hotel, sus servicios y comodidades para aquel que posea
 el máximo descuento.
--- 
-db.hotel.aggregate([
+-- db.hotel.aggregate([
   { $unwind: "$promociones" }, // lee todos los elementos del array
   { $sort: { "promociones.porcentaje": -1 } },
   { $limit: 1 },
@@ -66,8 +65,7 @@ db.hotel.aggregate([
 
 13. Mostrar los hoteles que tengan spa, pileta y además alguna promoción vigente
 mayor al 20%.
-
-db.hotel.find({
+-- db.hotel.find({
   "servicios.idServicio": { "$in": [1, 2] },  
   //1 para el spa y 2 para pileta
   "promociones": {
@@ -85,8 +83,7 @@ db.hotel.find({
 
 14. Mostrar todos los hoteles (nombre, dirección y teléfono) que no tengan
 promociones.
-
-db.hotel.find(
+-- db.hotel.find(
 {
   "promociones": { "$size": 0 }
 }, 
@@ -98,19 +95,14 @@ db.hotel.find(
 )
 
 15. Mostrar los mensajes recibidos del hotel con id 2.
-
-db.chat.find(
-{"idHotel":2},{"enviadosPorUser": 1, "_id":0}
+-- db.chat.find(
+  {"idHotel":2},{"enviadosPorUser": 1, "_id":0}
 )
 
 16. Mostrar todos los hoteles (nombre, dirección y teléfono) que tienen, al menos,
 tres promociones.
+-- db.hotel.find( { $expr: {$gt: [{ $size: "promociones" },1]}  } , {"nombre": 1, "direccion": 1, "telefono": 1})
 
-
-db.hotel.find( { $expr: {$gt: [{ $size: "promociones" },1]}  } , {"nombre": 1, "direccion": 1, "telefono": 1})
-
-
-{
     
 17. Explicar para qué sirve el operador de $elemMatch y dar un ejemplo.
 
@@ -143,13 +135,12 @@ db.collection.find({
 De esta forma, MongoDB va a encontrar los documentos que cumplan si o si  con estos dos criterios en el mismo
 documento, no en separados.
 
-}
 
 18. Mostrar todos los hoteles que tengan dentro de “números útiles” el teléfono de
 emergencias médicas.
 //Por la forma en la que tenemos modelada la base de datos lo tenemos que hacer con 2 consultas distintas
 //y de manera "hardcodeada"
-db.numerosUtiles.find(
+-- db.numerosUtiles.find(
   { "numeroUtil.nombre": "SAME" },
   { ciudad: 1, _id: 0 }
 )
@@ -157,7 +148,6 @@ db.hotel.find(
   { ciudadNumUtiles: { $in: ["Buenos Aires", "Puerto Madryn"] } },
   { nombre: 1, ciudad: 1, direccion: 1, telefono: 1 }
 )
-
 
 19. Mostrar los hoteles con sus promociones vigentes al día de hoy.
 -- db.hotel.find({"promociones.fechaFin" : {$gt: ISODate()} })
@@ -167,38 +157,35 @@ Tener en cuenta tanto los casos en los que existe como en los que no existe el
 campo.
 -- db.hotel.find({ "servicios": { $size: 0 } })
 
-
 21. Utilizando el método updateMany() dar un ejemplo de cada uno de los
-siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push.
-
--- $max
-
-db.promociones.updateMany(
-{ $max: { "porcentaje": 50} }
-)
-
--- $mul 
-
-db.promociones.updateMany(
-{"id":3} , {$mul : {"porcentaje":2}}
-)
-
--- $rename
-
-db.promociones.updateMany(
-{ $rename: { "nombre": "promocion nueva"} }
-)
-
--- $inc
-
-db.chat.updateMany(
+siguientes operadores: $inc, $max, $mul, $rename, $unset, $pop, $pull y $push
+-- db.chat.updateMany(
 {"id":6} , {$inc : {"id":100}}
 )
 
- 
+
+-- db.hotel.updateMany(
+  { }, { $max: { "promociones.$[].porcentaje": 50 } }
+)
+
+-- db.hotel.updateMany(
+  {"id":3} , {$mul : {"promociones.$[].porcentaje":2}}
+)
+
+-- 
+db.hotel.updateMany(
+  {}, { $rename: { "ciudadNumUtiles": "numUtiles"} }
+)
+
+-- db.puntoInteres.updateMany({ "ciudad":{ $ne: "Buenos Aires" } }, { $unset:{"telefono": "" } })
+-- db.puntoInteres.updateMany({}, { $pop: {"idHotelesCercanos":1}})
+-- db.hotel.updateMany( { "id":{$gt:2} }, { $pull:{ "puntosInteres":1 } } )
+-- db.hotel.updateMany( { "id":{$gt:2} }, { $push:{ "puntosInteres":2 } })
+
 22. Indicar el comando utilizado para exportar los datos de una collection y generar
 un documento json. Lo mismo para importar los datos desde un documento json
 y generar una collection dentro de la base de datos.
--- ESTE PROBEMOSLO EN CLASE !!!
-
+-- 
+mongoexport --db=tpHotel --collection=hotel --out=tpHotel.json --jsonFormat=relaxed
+mongoimport --db=tpHotel --collection=hotelsito  --file=tpHotel.json
 
