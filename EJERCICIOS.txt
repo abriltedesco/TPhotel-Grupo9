@@ -191,10 +191,11 @@ db.promociones.updateMany(
 
 -- $inc
 
-db.promocion.updateMany(
-{"id":2},{$inc: {"porcentaje":5}}
+db.chat.updateMany(
+{"id":6} , {$inc : {"id":100}}
 )
 
+ 
 22. Indicar el comando utilizado para exportar los datos de una collection y generar
 un documento json. Lo mismo para importar los datos desde un documento json
 y generar una collection dentro de la base de datos.
